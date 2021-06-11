@@ -30,10 +30,13 @@
 </script>
 
 <body>
-	<header>
+	<header id="header">
 		<div id="nav">
 			<a class="nav" href="{{ url_for('index') }}">Blog</a>
-			<a class="nav" href="https://www.linkedin.com/in/michelle-shen-b912ba179">Contact</a>
+			<a class="nav" href="https://www.linkedin.com/in/michelle-shen-b912ba179">LinkedIn</a>
+			<!-- <a class="nav" href="https://www.linkedin.com/in/michelle-shen-b912ba179">Resume</a> -->
+			<a class="nav" href="https://github.com/mshen63">GitHub</a>
+
 			<a class="nav" href="{{ url_for('emily') }}">Emily</a>
 
 		</div>
@@ -45,14 +48,23 @@
 		</br>
 		<div class="icon">
 			<a href="#resume">
-				<img id = "arrow" src="https://www.freeiconspng.com/thumbs/white-arrow-png/white-arrow-transparent-png-22.png">
+				<img id="arrowdown"
+					src="https://www.freeiconspng.com/thumbs/white-arrow-png/white-arrow-transparent-png-22.png">
 			</a>
 		</div>
 
 
 	</header>
 	<section id="resume">
-		<p>hello</p>
+		<div id="words">
+			<h3 id="comingsoon">Coming Soon!</h3>
+			<h4 id="comingsoon">In the meantime, please feel free to contact me at mshen63@gatech.edu, or connect with
+				me on <a href="https://www.linkedin.com/in/michelle-shen-b912ba179">LinkedIn</a>!</h4>
+		</div>
+		<a id="arrowuplink" href="#header">
+			<img id="arrowup"
+				src="https://www.freeiconspng.com/thumbs/white-arrow-png/white-arrow-transparent-png-22.png">
+		</a>
 	</section>
 
 

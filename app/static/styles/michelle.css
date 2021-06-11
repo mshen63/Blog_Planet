@@ -28,7 +28,8 @@ body {
   transform: rotate(90deg)
 }
 
-.arrow {
+.arrow
+ {
   position: absolute;
   /* top: 25px;
   width: 90%;
@@ -45,9 +46,28 @@ body {
   background-color: #c6e0f5;
 }
 
-#arrow{
+#resume{
+  height: 750px;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  flex-direction: column;
+}
+
+
+#words {
+  text-align: center;
+  height: 600px;
+}
+#arrowdown{
   width: 70px;
   height: 70px;
+}
+#arrowup{
+  width: 70px;
+  height: 70px;
+  transform: rotate(-90deg);
+
 }
 
 .arrow::after {
@@ -67,7 +87,7 @@ a {
 }
 
 #nav {
-  width: 15%;
+  width: 25%;
   display: flex;
   align-items: center;
   justify-content: space-between;
