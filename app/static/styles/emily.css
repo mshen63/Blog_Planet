@@ -15,25 +15,27 @@ body {
     font-family: Georgia, serif;
     color: #050A30;
     line-height: 1.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 h3 {
     display: inline-block
 }
-    
-#nav{
-    width: 10%;
+
+.links {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    color: blue;
-    text-decoration: none;
+    flex-direction: column;
 }
 
-#nav > a{
-    text-decoration: none;
-}
-
-#nav > a:hover{
-    text-decoration: underline;
+.nav_bar {
+    width: 50%;
+    background-color: cadetblue;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }

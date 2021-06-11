@@ -1,19 +1,20 @@
-
-
-
-
-
-
-
-
 import datetime
 import functools
 import os
 import re
 import urllib
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+
+
+
+
 
 from flask import (Flask, flash, Markup, redirect, render_template, request,
                    Response, session, url_for)
+from flask_mail import Mail, Message
 from markdown import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.extra import ExtraExtension
@@ -23,39 +24,37 @@ from peewee import *
 from playhouse.flask_utils import FlaskDB, get_object_or_404, object_list
 from playhouse.sqlite_ext import *
 
-####################### Future To-Dos ########################
-# search by content
+from flask_mail import Message
 
 
-# Blog configuration values.
 
-# You may consider using a one-way hash to generate the password, and then
-# use the hash again in the login view to perform the comparison. This is just
-# for simplicity.
-ADMIN_PASSWORD = 'secret'
+    
+ADMIN_PASSWORD = 'reliablerhinos'
 APP_DIR = os.path.dirname(os.path.realpath(__file__))
-
-# The playhouse.flask_utils.FlaskDB object accepts database URL configuration.
 DATABASE = 'sqliteext:///%s' % os.path.join(APP_DIR, 'blog.db')
 DEBUG = True
-
-# The secret key is used internally by Flask to encrypt session data stored
-# in cookies. Make this unique for your app.
 SECRET_KEY = 'shhh, secret!'
 
-# This is used by micawber, which will attempt to generate rich media
-# embedded objects with maxwidth=800.
+# For Micawber rich content
 SITE_WIDTH = 800
 
-
-# Create a Flask WSGI app and configure it using values from the module.
+# Create Flask WSGI app
 app = Flask(__name__)
 
+app.config['MAIL_SERVER']='smtp.mailtrap.io'
+app.config['MAIL_PORT'] = 2525
+app.config['MAIL_USERNAME'] = 'blogrhinos@gmail.com'
+app.config['MAIL_PASSWORD'] = 'hellorhinos'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+
+
+mail = Mail(app)
 app.config.from_object(__name__)
+
 # FlaskDB is a wrapper for a peewee database that sets up pre/post-request
 # hooks for managing database connections.
 flask_db = FlaskDB(app)
-
 
 # The `database` is the actual peewee database, as opposed to flask_db which is
 # the wrapper.
@@ -102,9 +101,7 @@ class Entry(flask_db.Model):
         return ret
 
     def update_search_index(self):
-        # Create a row in the FTSEntry table with the post content. This will
-        # allow us to use SQLite's awesome full-text search extension to
-        # search our entries.
+        # Create row in FTSEntry table. Allows search
         exists = (FTSEntry
                   .select(FTSEntry.docid)
                   .where(FTSEntry.docid == self.id)
@@ -148,11 +145,13 @@ class Entry(flask_db.Model):
                     (Entry.published == True))
                 .order_by(SQL('score')))
 
+
 class FTSEntry(FTSModel):
     content = TextField()
 
     class Meta:
         database = database
+
 
 def login_required(fn):
     @functools.wraps(fn)
@@ -161,6 +160,7 @@ def login_required(fn):
             return fn(*args, **kwargs)
         return redirect(url_for('login', next=request.path))
     return inner
+
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -178,12 +178,60 @@ def login():
             flash('Incorrect password.', 'danger')
     return render_template('login.html', next_url=next_url)
 
+@app.route('/requestpassword', methods = ["GET", "POST"])
+def requestpass():
+    if request.method=="POST" and request.form.get('thegoodword') and request.form.get("email"):
+        thegoodword = "Reliable Rhinos is the best pod!"
+        email = request.form.get('email')
+        emails = ["mshen63@gatech.edu","kunal.kushwaha@majorleaguehacking.com", "will@majorleaguehacking.com", "abeaboagye7@gmail.com","ayana.nithey@gmail.com"
+                  "charbel.breydyts@udlap.mx", "dakshinabp@gmail.com", "derya.1kilic.3@gmail.com", "emilyxinyi.chen@mail.utoronto.ca",
+                  "gina10111@hotmail.com", "irodrigoro@gmail.com", "lalohdez77@gmail.com", "thuanhsone99@gmail.com", "truongnguyenlinh@outlook.com", "wangela472@gmail.com"]
+        userinput = request.form.get('thegoodword')
+        if userinput==thegoodword and email in emails:
+            flash("Check your Email! You should've gotten the ~secret password~ to log in!", 'success')
+            me = "blogrhinos@gmail.com"
+            my_password = "hellorhinos"
+            you = email
+
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = "Alert"
+            msg['From'] = me
+            msg['To'] = "blogrhinos@gmail.com"
+
+            html = '<html><body><p>Hi, I have the following alerts for you!</p></body></html>'
+            part2 = MIMEText(html, 'html')
+
+            msg.attach(part2)
+
+            # Send the message via gmail's regular server, over SSL - passwords are being sent, afterall
+            s = smtplib.SMTP_SSL('smtp.gmail.com',587)
+            # uncomment if interested in the actual smtp conversation
+            # s.set_debuglevel(1)
+            # do the smtp auth; sends ehlo if it hasn't been sent already
+            s.login(me, my_password)
+
+            s.sendmail(me, you, msg.as_string())
+            s.quit()
+                        
+            # msg = Message('Hello from the other side!', sender = 'blogrhinos@gmail.com', recipients = ['blogrhinos@gmail.com'])
+            # msg.body = "Hey Paul, sending you this email from my Flask app, lmk if it works"
+            # mail.send(msg)
+            return "Message sent!"
+        else:
+            flash("Please use your Reliable Rhinos email and make sure you typed the phrase exactly as shown!", 'danger')
+
+        
+    return render_template('requestaccount.html')
+    
+
+
 @app.route('/logout/', methods=['GET', 'POST'])
 def logout():
     if request.method == 'POST':
         session.clear()
         return redirect(url_for('login'))
     return render_template('logout.html')
+
 
 @app.route('/')
 def index():
@@ -193,24 +241,21 @@ def index():
     else:
         query = Entry.public().order_by(Entry.timestamp.desc())
 
-    # The `object_list` helper will take a base query and then handle
-    # paginating the results if there are more than 20. For more info see
-    # the docs:
-    # http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#object_list
     return object_list(
         'index.html',
         query,
         search=search_query,
         check_bounds=False)
 
+
 @app.route('/michelle')
 def michelle():
     return render_template("michelle.html", url=os.getenv("URL"))
 
+
 @app.route('/emily')
 def emily():
     return render_template("emily.html", url=os.getenv("URL"))
-
 
 
 def _create_or_edit(entry, template):
@@ -237,16 +282,19 @@ def _create_or_edit(entry, template):
 
     return render_template(template, entry=entry)
 
+
 @app.route('/create/', methods=['GET', 'POST'])
 @login_required
 def create():
     return _create_or_edit(Entry(title='', content=''), 'create.html')
+
 
 @app.route('/drafts/')
 @login_required
 def drafts():
     query = Entry.drafts().order_by(Entry.timestamp.desc())
     return object_list('index.html', query, check_bounds=False)
+
 
 @app.route('/<slug>/')
 def detail(slug):
@@ -257,11 +305,13 @@ def detail(slug):
     entry = get_object_or_404(query, Entry.slug == slug)
     return render_template('detail.html', entry=entry)
 
+
 @app.route('/<slug>/edit/', methods=['GET', 'POST'])
 @login_required
 def edit(slug):
     entry = get_object_or_404(Entry, Entry.slug == slug)
     return _create_or_edit(entry, 'edit.html')
+
 
 @app.template_filter('clean_querystring')
 def clean_querystring(request_args, *keys_to_remove, **new_values):
@@ -276,11 +326,12 @@ def clean_querystring(request_args, *keys_to_remove, **new_values):
     querystring.update(new_values)
     return urllib.urlencode(querystring)
 
+
 @app.errorhandler(404)
 def not_found(exc):
     return Response('<h3>Not found</h3>'), 404
 
 
-database.create_tables([Entry, FTSEntry], safe=True)
-app.run(debug=True)
-
+def main():
+    database.create_tables([Entry, FTSEntry], safe=True)
+    app.run(debug=True)
