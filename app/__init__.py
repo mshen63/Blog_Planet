@@ -203,9 +203,13 @@ def index():
         search=search_query,
         check_bounds=False)
 
-@app.route('/<name>')
-def take_name(name):
-    return render_template(name+".html", url=os.getenv("URL"))
+@app.route('/michelle')
+def michelle():
+    return render_template("michelle.html", url=os.getenv("URL"))
+
+@app.route('/emily')
+def emily():
+    return render_template("emily.html", url=os.getenv("URL"))
 
 
 

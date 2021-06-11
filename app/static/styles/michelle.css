@@ -1,4 +1,4 @@
-
+@import url("//fonts.googleapis.com/css?family=Source+Sans+Pro")
 
 * {
     -webkit-box-sizing: border-box;
@@ -12,7 +12,7 @@
   }
   
   body {
-    font-family: "Lato", sans-serif;
+    font-family: Source Sans Lato;
     font-weight: 300;
     line-height: 1.5;
     color: #333;
@@ -22,6 +22,23 @@
     color: #fff;
   }
   
+    
+  #nav{
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: blue;
+    text-decoration: none;
+  }
+  #nav > a{
+    text-decoration: none;
+  }
+  #nav > a:hover{
+    text-decoration: underline;
+  }
+
+
   .row {
     width: 100%;
     max-width: 1170px;
@@ -48,6 +65,10 @@
     color: #fff;
     text-align: center;
     padding: 30px 0 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
   header h1 {
     text-align: center;

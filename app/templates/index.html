@@ -11,7 +11,7 @@
         {{ entry.title }}
       </a>
     </h3>
-    <p>Created {{ entry.timestamp.strftime('%m/%d/%Y at %G:%I%p') }}</p>
+    <p><i>Created {{ entry.timestamp.strftime('%m/%d/%Y at %G:%I%p') }}</i></p>
   {% endfor %}
   {% include "includes/pagination.html" %}
 {% endblock %}

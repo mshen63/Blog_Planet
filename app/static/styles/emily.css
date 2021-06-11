@@ -1,0 +1,39 @@
+h1 {
+    font-size: 2em;
+    font-family: Georgia, serif;
+    color: #050A30;
+}
+
+#profile_pic {
+    vertical-align: top;
+    display: inline-block;
+    padding: 10px;
+}
+
+body {
+    background-color: powderblue;
+    font-family: Georgia, serif;
+    color: #050A30;
+    line-height: 1.6;
+}
+
+h3 {
+    display: inline-block
+}
+    
+#nav{
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: blue;
+    text-decoration: none;
+}
+
+#nav > a{
+    text-decoration: none;
+}
+
+#nav > a:hover{
+    text-decoration: underline;
+}
