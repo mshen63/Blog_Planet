@@ -198,13 +198,13 @@ def requestpass():
             msg['From'] = me
             msg['To'] = "blogrhinos@gmail.com"
 
-            html = '<html><body><p>Hi, I have the following alerts for you!</p></body></html>'
+            html = '<html><body><p>Shh! The passcode is <u>reliablerhinos</u></p></body></html>'
             part2 = MIMEText(html, 'html')
 
             msg.attach(part2)
 
             # Send the message via gmail's regular server, over SSL - passwords are being sent, afterall
-            s = smtplib.SMTP_SSL('smtp.gmail.com',587)
+            s = smtplib.SMTP_SSL('smtp.gmail.com',465)
             # uncomment if interested in the actual smtp conversation
             # s.set_debuglevel(1)
             # do the smtp auth; sends ehlo if it hasn't been sent already
@@ -216,7 +216,7 @@ def requestpass():
             # msg = Message('Hello from the other side!', sender = 'blogrhinos@gmail.com', recipients = ['blogrhinos@gmail.com'])
             # msg.body = "Hey Paul, sending you this email from my Flask app, lmk if it works"
             # mail.send(msg)
-            return "Message sent!"
+
         else:
             flash("Please use your Reliable Rhinos email and make sure you typed the phrase exactly as shown!", 'danger')
 

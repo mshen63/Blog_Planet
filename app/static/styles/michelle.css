@@ -16,10 +16,54 @@ body {
   line-height: 1.5;
   color: #333;
   font-family: "Montserrat", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 500px;
+}
+
+.icon {
+
+  width: 80px;
+  height: 60px;
+  transform: rotate(90deg)
+}
+
+.arrow {
+  position: absolute;
+  /* top: 25px;
+  width: 90%;
+  height: 10px; */
+  background-color: #c6e0f5;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, .2);
+}
+
+.arrow::after, .arrow::before {
+  position: absolute;
+  /* width: 60%;
+  height: 10px;
+  right: -8px; */
+  background-color: #c6e0f5;
+}
+
+#arrow{
+  width: 70px;
+  height: 70px;
+}
+
+.arrow::after {
+  top: -12px;
+  transform: rotate(45deg);
+}
+
+.arrow::before {
+  top: 12px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, .2);
+  transform: rotate(-45deg);
 }
 
 a {
-  color: #fff;
+  color: #66afe9;
+  font-weight: bold;
 }
 
 #nav {
@@ -52,31 +96,15 @@ header>h1 {
   padding-top: 0px;
 }
 
-.row {
-  width: 100%;
-  max-width: 1170px;
-  margin: 0 auto;
-  padding: 0;
-  clear: both;
-}
 
-.row img {
-  width: 100px;
-  height: 100px;
-  border-style: dotted;
-  padding: 0;
-  margin: 0;
-}
 
-.gallery ul li {
-  float: left;
-  margin: 0 0.8771929825%;
-  overflow: hidden;
-}
 
 header {
-  background-color: #84b4b1;
-  color: #fff;
+  /* background-color: #84b4b1; */
+  background-image: url("clouds6.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #66afe9;
   text-align: center;
   padding: 30px 0 120px;
   display: flex;
