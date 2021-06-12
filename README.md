@@ -3,8 +3,8 @@
 * This page contains three main pages: the blog page, Michelle's about page, and Emily's about page
 * The blog posts are displayed in chronological order
 * Anyone with the ~secret passcode~ can log in and write posts to our blog! As of now, only members of the Reliable Rhinos pod can provide their email to get the passcode emailed to them
-* Logged in users will be able to write posts which they can choose to draft and come back to or publish to the blog. All entries can be edited even after publication
-* The editor supports highlighting and editing of any posts, even published ones!
+* Logged in users will be able to write posts which they can choose to draft and come back to or publish to the blog
+* Editor uses markdown and supports syntax highlighting and rich content embedding 
 * On the top banner, you will see links that can lead to each of our personal pages where you can learn more about us
 
 ## Technologies Used
