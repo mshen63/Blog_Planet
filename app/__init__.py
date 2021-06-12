@@ -328,3 +328,6 @@ def not_found(exc):
 def main():
     database.create_tables([Entry, FTSEntry], safe=True)
     app.run(debug=True)
+
+def getApp():
+    return app
