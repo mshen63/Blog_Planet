@@ -6,12 +6,6 @@ import urllib
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
-
-
-
-
-
 from flask import (Flask, flash, Markup, redirect, render_template, request,
                    Response, session, url_for)
 from flask_mail import Mail, Message
@@ -23,28 +17,27 @@ from micawber.cache import Cache as OEmbedCache
 from peewee import *
 from playhouse.flask_utils import FlaskDB, get_object_or_404, object_list
 from playhouse.sqlite_ext import *
-
-from flask_mail import Message
-
-
-
     
-ADMIN_PASSWORD = 'reliablerhinos'
+
 APP_DIR = os.path.dirname(os.path.realpath(__file__))
 DATABASE = 'sqliteext:///%s' % os.path.join(APP_DIR, 'blog.db')
 DEBUG = True
-SECRET_KEY = 'shhh, secret!'
+
 
 # For Micawber rich content
 SITE_WIDTH = 800
 
 # Create Flask WSGI app
 app = Flask(__name__)
+app.config.from_pyfile('config.py')
+
+SECRET_KEY = app.config.get("SECRET_KEY")
+ADMIN_PASSWORD = app.config.get("ADMIN_PASSWORD")
 
 app.config['MAIL_SERVER']='smtp.mailtrap.io'
 app.config['MAIL_PORT'] = 2525
-app.config['MAIL_USERNAME'] = 'blogrhinos@gmail.com'
-app.config['MAIL_PASSWORD'] = 'hellorhinos'
+app.config['MAIL_USERNAME'] = app.config.get("MAIL_USERNAME")
+app.config['MAIL_PASSWORD'] = app.config.get("MAIL_PASSWORD")
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 
