@@ -45,17 +45,11 @@ app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 app.config.from_object(__name__)
 
-# FlaskDB is a wrapper for a peewee database that sets up pre/post-request
-# hooks for managing database connections.
+# wrapper for peewee DB
 flask_db = FlaskDB(app)
-
-# The `database` is the actual peewee database, as opposed to flask_db which is
-# the wrapper.
 database = flask_db.database
 
-# Configure micawber with the default OEmbed providers (YouTube, Flickr, etc).
-# We'll use a simple in-memory cache so that multiple requests for the same
-# video don't require multiple network requests.
+# Configure micawber with the default OEmbed providers (YouTube, Flickr, etc)
 oembed_providers = bootstrap_basic(OEmbedCache())
 
 
@@ -68,11 +62,7 @@ class Entry(flask_db.Model):
 
     @property
     def html_content(self):
-        """
-        Generate HTML representation of the markdown-formatted blog entry,
-        and also convert any media URLs into rich media objects such as video
-        players or images.
-        """
+
         hilite = CodeHiliteExtension(linenums=False, css_class='highlight')
         extras = ExtraExtension()
         markdown_content = markdown(self.content, extensions=[hilite, extras])
@@ -84,7 +74,7 @@ class Entry(flask_db.Model):
         return Markup(oembed_content)
 
     def save(self, *args, **kwargs):
-        # Generate a URL-friendly representation of the entry's title.
+        # Generate URL-friendly rep of entry's title.
         if not self.slug:
             self.slug = re.sub(r'[^\w]+', '-', self.title.lower()).strip('-')
         ret = super(Entry, self).save(*args, **kwargs)
@@ -160,8 +150,7 @@ def login():
     next_url = request.args.get('next') or request.form.get('next')
     if request.method == 'POST' and request.form.get('password'):
         password = request.form.get('password')
-        # TODO: If using a one-way hash, you would also hash the user-submitted
-        # password and do the comparison on the hashed versions.
+
         if password == app.config['ADMIN_PASSWORD']:
             session['logged_in'] = True
             session.permanent = True  # Use cookie to store session.
@@ -195,24 +184,16 @@ def requestpass():
             part2 = MIMEText(html, 'html')
 
             msg.attach(part2)
-
-            # Send the message via gmail's regular server, over SSL - passwords are being sent, afterall
             s = smtplib.SMTP_SSL('smtp.gmail.com',465)
             # uncomment if interested in the actual smtp conversation
             # s.set_debuglevel(1)
-            # do the smtp auth; sends ehlo if it hasn't been sent already
             s.login(me, my_password)
 
             s.sendmail(me, you, msg.as_string())
             s.quit()
-                        
-            # msg = Message('Hello from the other side!', sender = 'blogrhinos@gmail.com', recipients = ['blogrhinos@gmail.com'])
-            # msg.body = "Hey Paul, sending you this email from my Flask app, lmk if it works"
-            # mail.send(msg)
 
         else:
             flash("Please use your Reliable Rhinos email and make sure you typed the phrase exactly as shown!", 'danger')
-
         
     return render_template('requestaccount.html')
     
@@ -259,8 +240,7 @@ def _create_or_edit(entry, template):
         if not (entry.title and entry.content):
             flash('Title and Content are required.', 'danger')
         else:
-            # Wrap the call to save in a transaction so we can roll it back
-            # cleanly in the event of an integrity error.
+         
             try:
                 with database.atomic():
                     entry.save()
@@ -308,11 +288,7 @@ def edit(slug):
 
 @app.template_filter('clean_querystring')
 def clean_querystring(request_args, *keys_to_remove, **new_values):
-    # We'll use this template filter in the pagination include. This filter
-    # will take the current URL and allow us to preserve the arguments in the
-    # querystring while replacing any that we need to overwrite. For instance
-    # if your URL is /?q=search+query&page=2 and we want to preserve the search
-    # term but make a link to page 3, this filter will allow us to do that.
+   
     querystring = dict((key, value) for key, value in request_args.items())
     for key in keys_to_remove:
         querystring.pop(key, None)
