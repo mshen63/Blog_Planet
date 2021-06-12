@@ -82,7 +82,7 @@ google-auth-oauthlib==0.4.2
 google-pasta==0.2.0
 greenlet @ file:///opt/concourse/worker/volumes/live/02d5d57d-1f11-4cf9-580a-19e679c78dc9/volume/greenlet_1600874049903/work
 grpcio==1.32.0
-gunicorn==19.9.0
+gunicorn==20.1.0
 h5py==2.10.0
 HeapDict==1.0.1
 heroku==0.1.4
